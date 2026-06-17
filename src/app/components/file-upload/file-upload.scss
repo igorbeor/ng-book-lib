@@ -1,0 +1,26 @@
+.drop-zone {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--mat-sys-on-surface-variant);
+  padding: 20px;
+  border-radius: 5px;
+
+  &.drag-over:not(.drag-disabled) {
+    border-color: var(--mat-sys-tertiary);
+  }
+
+  &.drag-over.drag-disabled {
+    border-color: var(--mat-sys-error);
+  }
+
+  &__label {
+    font: var(--mat-sys-label-large);
+    margin-right: 0.5em;
+  }
+
+  .remove-file-button {
+    margin-top: 8px;
+  }
+}
