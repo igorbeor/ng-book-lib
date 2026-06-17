@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Structure A: each field as a child element -->
+<library>
+  <book>
+    <title>The Hobbit</title>
+    <author>J.R.R. Tolkien</author>
+    <pages>310</pages>
+  </book>
+  <book>
+    <title>The Fellowship of the Ring</title>
+    <author>J.R.R. Tolkien</author>
+    <pages>423</pages>
+  </book>
+  <book>
+    <title>The Shining</title>
+    <author>Stephen King</author>
+    <pages>447</pages>
+  </book>
+  <book>
+    <title>It</title>
+    <author>Stephen King</author>
+    <pages>1138</pages>
+  </book>
+  <book>
+    <title>The Little Mermaid</title>
+    <author>Hans Christian Andersen</author>
+    <pages>64</pages>
+  </book>
+  <book>
+    <title>The Ugly Duckling</title>
+    <author>Hans Christian Andersen</author>
+    <pages>32</pages>
+  </book>
+</library>

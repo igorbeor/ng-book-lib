@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Structure C: books grouped under their author, with renamed tags -->
+<catalog>
+  <author name="Agatha Christie">
+    <work name="Murder on the Orient Express" length="256" />
+    <work name="And Then There Were None" length="272" />
+  </author>
+  <author name="Gabriel Garcia Marquez">
+    <work name="One Hundred Years of Solitude" length="417" />
+    <work name="Love in the Time of Cholera" length="368" />
+  </author>
+  <author name="Mark Twain">
+    <work name="The Adventures of Tom Sawyer" length="274" />
+    <work name="Adventures of Huckleberry Finn" length="366" />
+  </author>
+  <author name="Leo Tolstoy">
+    <work name="War and Peace" length="1225" />
+    <work name="Anna Karenina" length="864" />
+  </author>
+</catalog>
