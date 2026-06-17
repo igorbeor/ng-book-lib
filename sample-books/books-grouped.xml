@@ -13,8 +13,8 @@
     <work name="The Adventures of Tom Sawyer" length="274" />
     <work name="Adventures of Huckleberry Finn" length="366" />
   </author>
-  <author name="Leo Tolstoy">
-    <work name="War and Peace" length="1225" />
-    <work name="Anna Karenina" length="864" />
+  <author name="Thomas Mann">
+    <work name="The Magic Mountain" length="706" />
+    <work name="Buddenbrooks" length="731" />
   </author>
 </catalog>
