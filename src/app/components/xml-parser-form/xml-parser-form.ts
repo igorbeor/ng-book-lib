@@ -41,7 +41,7 @@ function fileTypeRule(path: SchemaPathTree<File | null>, fileTypes: string[]) {
     const file = value();
     return file === null || fileTypes.includes(file.type)
       ? null
-      : { kind: 'xmlFileType', message: `File should have one of the following types: ${fileTypes.join(', ')}` };
+      : { kind: 'wrongFileType', message: `File should have one of the following types: ${fileTypes.join(', ')}` };
   });
 }
 
