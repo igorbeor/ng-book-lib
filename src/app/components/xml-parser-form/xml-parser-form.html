@@ -1,0 +1,145 @@
+<form [formRoot]="xmlParserForm" novalidate>
+  <mat-accordion class="example-headers-align">
+    <mat-expansion-panel [expanded]="step() === 0" (opened)="step.set(0)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title> List/Item Elements </mat-panel-title>
+        <mat-panel-description>
+          Please specify the XML elements that represent the list and individual items
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <mat-grid-list cols="2" rowHeight="90px" gutterSize="10px">
+        <mat-grid-tile colspan="1">
+          <mat-form-field class="form-field">
+            <mat-label>List Element</mat-label>
+            <input matInput type="text" [formField]="xmlParserForm.config.listElement" />
+            @if (
+              xmlParserForm.config.listElement().touched() &&
+              xmlParserForm.config.listElement().invalid()
+            ) {
+              <mat-error>
+                {{ xmlParserForm.config.listElement().errors()[0]?.message }}
+              </mat-error>
+            }
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Item Element</mat-label>
+            <input matInput type="text" [formField]="xmlParserForm.config.itemElement" />
+            @if (
+              xmlParserForm.config.itemElement().touched() &&
+              xmlParserForm.config.itemElement().invalid()
+            ) {
+              <mat-error>
+                {{ xmlParserForm.config.itemElement().errors()[0]?.message }}
+              </mat-error>
+            }
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <mat-action-row>
+        <button matButton="text" (click)="step.set(1)">Next</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+    <mat-expansion-panel [expanded]="step() === 1" (opened)="step.set(1)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Field Elements </mat-panel-title>
+        <mat-panel-description>
+          Please specify the XML elements that represent the fields.
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <mat-grid-list cols="2" rowHeight="90px" gutterSize="10px">
+        <mat-grid-tile colspan="1">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Title Element</mat-label>
+            <input matInput type="text" [formField]="xmlParserForm.config.fields.title.element" />
+            @if (
+              xmlParserForm.config.fields.title.element().touched() &&
+              xmlParserForm.config.fields.title.element().invalid()
+            ) {
+              <mat-error>
+                {{ xmlParserForm.config.fields.title.element().errors()[0]?.message }}
+              </mat-error>
+            }
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Title Attribute</mat-label>
+            <input matInput type="text" [formField]="xmlParserForm.config.fields.title.attribute" />
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Author Element</mat-label>
+            <input matInput type="text" [formField]="xmlParserForm.config.fields.author.element" />
+            @if (
+              xmlParserForm.config.fields.author.element().touched() &&
+              xmlParserForm.config.fields.author.element().invalid()
+            ) {
+              <mat-error>
+                {{ xmlParserForm.config.fields.author.element().errors()[0]?.message }}
+              </mat-error>
+            }
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Author Attribute</mat-label>
+            <input
+              matInput
+              type="text"
+              [formField]="xmlParserForm.config.fields.author.attribute"
+            />
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Pages Element</mat-label>
+            <input matInput type="text" [formField]="xmlParserForm.config.fields.pages.element" />
+            @if (
+              xmlParserForm.config.fields.pages.element().touched() &&
+              xmlParserForm.config.fields.pages.element().invalid()
+            ) {
+              <mat-error>
+                {{ xmlParserForm.config.fields.pages.element().errors()[0]?.message }}
+              </mat-error>
+            }
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Pages Attribute</mat-label>
+            <input matInput type="text" [formField]="xmlParserForm.config.fields.pages.attribute" />
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <mat-action-row>
+        <button matButton="text" (click)="step.set(0)">Previous</button>
+        <button matButton="text" (click)="step.set(2)">Next</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+    <mat-expansion-panel [expanded]="step() === 2" (opened)="step.set(2)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title> List/Item Elements </mat-panel-title>
+        <mat-panel-description>
+          Please specify the XML elements that represent the list and individual items
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <app-file-upload
+        class="form-field file-field"
+        [allowedTypes]="FILE_ALLOWED_TYPES"
+        [formField]="xmlParserForm.file"
+      ></app-file-upload>
+      <mat-action-row class="form-actions">
+        @if (xmlParserForm.file().touched() && xmlParserForm.file().invalid()) {
+          <mat-error>
+            {{ xmlParserForm.file().errors()[0]?.message }}
+          </mat-error>
+        }
+        <button matButton="outlined" type="button" (click)="onReset()">Reset</button>
+        <button matButton="filled" type="submit">Submit</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+</form>
