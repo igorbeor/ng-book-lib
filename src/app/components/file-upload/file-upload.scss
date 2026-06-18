@@ -6,6 +6,7 @@
   border: 2px dashed var(--mat-sys-on-surface-variant);
   padding: 20px;
   border-radius: 5px;
+  width: 100%;
 
   &.drag-over:not(.drag-disabled) {
     border-color: var(--mat-sys-tertiary);
@@ -17,10 +18,27 @@
 
   &__label {
     font: var(--mat-sys-label-large);
-    margin-right: 0.5em;
+    margin-right: 0.5rem;
   }
 
   .remove-file-button {
-    margin-top: 8px;
+    margin-top: 0.5rem;
+  }
+}
+
+.file-preview {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+
+  &__name {
+    font: var(--mat-sys-body-large);
+    color: var(--mat-sys-on-surface);
+  }
+
+  &__size {
+    font: var(--mat-sys-body-small);
+    color: var(--mat-sys-on-surface-variant);
   }
 }

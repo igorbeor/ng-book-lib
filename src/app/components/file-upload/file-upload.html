@@ -1,27 +1,21 @@
-@let files = value();
+@let file = value();
 <div
   class="drop-zone"
   (drop)="onDrop($event)"
   (dragover)="onDragOver($event)"
   (dragleave)="onDragLeave($event)"
   [class.drag-over]="isDragOver()"
-  [class.drag-disabled]="files.length > 0"
+  [class.drag-disabled]="file !== null"
 >
-  @if (files.length > 0) {
-    <mat-list>
-      @for (file of files; track file.name) {
-        <mat-list-item>
-          <mat-icon matListItemIcon>file_present</mat-icon>
-          <span matListItemTitle>{{ file.name }}</span>
-          <span matListItemLine>{{ file.size }} bytes</span>
-          <span matListItemMeta>
-            <button mat-icon-button class="remove-file-button" (click)="onRemoveFile(file)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </span>
-        </mat-list-item>
-      }
-    </mat-list>
+  @if (file !== null) {
+    <div class="file-preview">
+      <mat-icon class="file-preview__icon">file_present</mat-icon>
+      <span class="file-preview__name">{{ file.name }}</span>
+      <span class="file-preview__size">{{ file.size }} bytes</span>
+      <button mat-icon-button class="file-preview__remove-btn" (click)="onRemoveFile()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
   } @else {
     <label for="file-input" class="drop-zone__label">
       {{ dragAndDropText() }}

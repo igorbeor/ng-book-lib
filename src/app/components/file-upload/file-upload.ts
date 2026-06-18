@@ -16,7 +16,7 @@ export class FileUpload {
   public buttonText = input<string>('Select File');
   public dragAndDropText = input<string>('Drag and drop files here or click to');
 
-  public value = model<File[]>([]);
+  public value = model<File | null>(null);
   public accept = computed(() => this.allowedTypes().join(','));
 
   public isDragOver = signal<boolean>(false);
@@ -27,7 +27,7 @@ export class FileUpload {
     event.preventDefault();
     this.isDragOver.set(true);
 
-    if (this.value().length > 0 && event.dataTransfer) {
+    if (this.value() && event.dataTransfer) {
       event.dataTransfer.dropEffect = 'none';
     }
   }
@@ -41,40 +41,38 @@ export class FileUpload {
     event.preventDefault();
     this.isDragOver.set(false);
   
-    if (this.value().length > 0) return;
+    if (this.value()) return;
 
     const files = event.dataTransfer?.files;
-    if (this.validateFiles(files)) {
-      this.value.set(Array.from(files!));
+    const file = files?.[0] ?? null;
+    if (this.validateFiles(file)) {
+      this.value.set(file);
     }
   }
 
   onFileChange(event: Event) {
-    if (this.value().length > 0) return;
+    if (this.value()) return;
 
     const input = event.target as HTMLInputElement;
     const files = input.files;
-    if (this.validateFiles(files)) {
-      this.value.set(Array.from(files!));
+    const file = files?.[0] ?? null;
+    if (this.validateFiles(file)) {
+      this.value.set(file);
     }
   }
 
-  onRemoveFile(file: File) {
-    const currentFiles = this.value();
-    this.value.set(currentFiles.filter((f) => f !== file));
+  onRemoveFile() {
+    this.value.set(null);
   }
 
-  private validateFiles(files?: FileList | null): boolean {
-    if (!files || files.length === 0) {
+  private validateFiles(file: File | null): boolean {
+    if (!file) {
       this.openSnackBar('No files selected.');
       return false;
     }
-    const notAllowedFileTypes = Array.from(files).filter(
-      (file) => !this.allowedTypes().includes(file.type),
-    );
-    if (notAllowedFileTypes.length > 0) {
+    if (!this.allowedTypes().includes(file.type)) {
       this.openSnackBar(
-        `File type not allowed: ${notAllowedFileTypes.map((file) => file.type).join(', ')}`,
+        `File type not allowed: ${file.type}. Allowed types: ${this.allowedTypes().join(', ')}`,
       );
       return false;
     }
