@@ -4,4 +4,8 @@ export interface Book {
   pages: string;
 }
 
+export interface BookStoreItem extends Book {
+  id: string
+}
+
 export type BookFields = keyof Book;

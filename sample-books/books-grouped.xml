@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Structure C: books grouped under their author, with renamed tags -->
+<!-- Structure C: only author is a child element with name attribute -->
 <catalog>
-  <author name="Agatha Christie">
-    <work name="Murder on the Orient Express" length="256" />
-    <work name="And Then There Were None" length="272" />
-  </author>
-  <author name="Gabriel Garcia Marquez">
-    <work name="One Hundred Years of Solitude" length="417" />
-    <work name="Love in the Time of Cholera" length="368" />
-  </author>
-  <author name="Mark Twain">
-    <work name="The Adventures of Tom Sawyer" length="274" />
-    <work name="Adventures of Huckleberry Finn" length="366" />
-  </author>
-  <author name="Thomas Mann">
-    <work name="The Magic Mountain" length="706" />
-    <work name="Buddenbrooks" length="731" />
-  </author>
+  <work name="Murder on the Orient Express" length="256">
+    <author name="Agatha Christie"></author>
+  </work>
+  <work name="And Then There Were None" length="272">
+    <author name="Agatha Christie"></author>
+  </work>
+  <work name="One Hundred Years of Solitude" length="417">
+    <author name="Gabriel Garcia Marquez"></author>
+  </work>
+  <work name="Love in the Time of Cholera" length="368">
+    <author name="Gabriel Garcia Marquez"></author>
+  </work>
+  <work name="The Adventures of Tom Sawyer" length="274">
+    <author name="Mark Twain"></author>
+  </work>
+  <work name="Adventures of Huckleberry Finn" length="366">
+    <author name="Mark Twain"></author>
+  </work>
+  <work name="The Magic Mountain" length="706">
+    <author name="Thomas Mann"></author>
+  </work>
+  <work name="Buddenbrooks" length="731">
+    <author name="Thomas Mann"></author>
+  </work>
 </catalog>
