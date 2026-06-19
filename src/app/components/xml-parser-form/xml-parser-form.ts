@@ -9,15 +9,20 @@ import {
   validateTree,
   submit,
 } from '@angular/forms/signals';
-import { ParserConfig, ParserConfigField } from '../../models/parser-config';
+import { ParserConfig, ParserConfigField, ParserConfigFields } from '../../models/parser-config';
 import { FileUpload } from '../file-upload/file-upload';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { DocumentParser } from '../../services/document-parser/document-parser';
+import {
+  DocumentParser,
+  DocumentParserError,
+} from '../../services/document-parser/document-parser';
 import { BookStore } from '../../services/book-store/book-store';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { BookFields } from '../../models/book';
 
 interface ParserFormModel {
   config: ParserConfig;
@@ -95,6 +100,7 @@ export class XmlParserForm {
 
   private documentParser = inject(DocumentParser);
   private bookStore = inject(BookStore);
+  private snackBar = inject(MatSnackBar);
 
   private xmlParserModel = signal<ParserFormModel>({ ...this.PARSER_INITIAL_MODEL });
   public xmlParserForm = form(this.xmlParserModel, (schemaPath) => {
@@ -110,11 +116,20 @@ export class XmlParserForm {
   public async onSubmit(): Promise<void> {
     await submit(this.xmlParserForm, async (f) => {
       const { config, file } = this.xmlParserModel();
-      const books = await this.documentParser.parse(file!, config);
-      this.bookStore.set(books);
-      this.submitted.emit(config);
-      f().reset({ ...this.PARSER_INITIAL_MODEL });
-      console.log(this.bookStore.books());
+      try {
+        const books = await this.documentParser.parse(file!, config);
+        this.bookStore.set(books);
+        this.submitted.emit(config);
+        f().reset({ ...this.PARSER_INITIAL_MODEL });
+        console.log(this.bookStore.books());
+      } catch (e) {
+        if (e instanceof DocumentParserError) {
+          console.error('DocumentParserError: ', e.message);
+          this.snackBar.open(e.message, 'OK', { duration: 3000 });
+        } else {
+          throw e; // not mine — rethrow, don't swallow
+        }
+      }
     });
   }
 

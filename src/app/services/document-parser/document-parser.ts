@@ -2,6 +2,20 @@ import { Service } from '@angular/core';
 import { Book, BookFields } from '../../models/book';
 import { ParserConfig } from '../../models/parser-config';
 
+export interface DocumentParserErrorReason {
+  type: 'fileType' | 'element' | 'attribute';
+  value: string | `fields.${string}`;
+}
+
+export class DocumentParserError extends Error {
+  public reason;
+
+  constructor(message: string, reason: DocumentParserErrorReason) {
+    super(message);
+    this.reason = reason;
+  }
+}
+
 @Service()
 export class DocumentParser {
   private readonly parser = new DOMParser();
@@ -15,13 +29,19 @@ export class DocumentParser {
 
   public async parse(file: File, config: ParserConfig): Promise<Book[]> {
     if (this.isDOMParserSupportedType(file.type) === false) {
-      throw new Error(`Unsupported file type: ${file.type}`);
+      throw new DocumentParserError(`Unsupported file type: ${file.type}`, {
+        type: 'fileType',
+        value: file.type,
+      });
     }
     const xmlString = await file.text();
     const xmlDoc = this.parser.parseFromString(xmlString, file.type);
     const listElements = xmlDoc.getElementsByTagName(config.listElement);
     if (listElements.length === 0) {
-      throw new Error(`List element "${config.listElement}" not found in the XML.`);
+      throw new DocumentParserError(`List element "${config.listElement}" not found in the XML.`, {
+        type: 'element',
+        value: 'listElement',
+      });
     }
 
     const allBooks: Book[] = [];
@@ -39,7 +59,10 @@ export class DocumentParser {
   private parseListElement(listElement: Element, config: ParserConfig): Book[] {
     const items = listElement.getElementsByTagName(config.itemElement);
     if (items.length === 0) {
-      throw new Error(`Item element "${config.itemElement}" not found in the XML.`);
+      throw new DocumentParserError(`Item element "${config.itemElement}" not found in the XML.`, {
+        type: 'element',
+        value: 'itemElement',
+      });
     }
 
     const books: Book[] = [];
@@ -76,11 +99,23 @@ export class DocumentParser {
     let element = itemElement;
     if (fieldConfig.element) {
       element = itemElement.getElementsByTagName(fieldConfig.element)[0];
+      if (!element) {
+        throw new DocumentParserError(`Field element "${fieldConfig.element}" is not found.`, {
+          type: 'element',
+          value: `fields.${field}`,
+        });
+      }
     }
     if (fieldConfig.attribute) {
       value = element.getAttribute(fieldConfig.attribute);
+      if (value === null) {
+        throw new DocumentParserError(
+          `Attribute "${fieldConfig.attribute}" of "${element.tagName}" is not found!`,
+          { type: 'attribute', value: `fields.${field}` },
+        );
+      }
     } else {
-      value = element.textContent;
+      value = element.textContent ?? '';
     }
 
     return value ?? '';
@@ -112,10 +147,10 @@ export class DocumentParser {
     const children = this.buildChildren(item, keys, config);
 
     const openTag = attributes
-      ? `  <${config.itemElement} ${attributes}${ children ? '>' : '/>'}`
+      ? `  <${config.itemElement} ${attributes}${children ? '>' : '/>'}`
       : `  <${config.itemElement}>`;
 
-    return `${openTag}${ children ? `\n${children}\n  </${config.itemElement}>` : ''}`;
+    return `${openTag}${children ? `\n${children}\n  </${config.itemElement}>` : ''}`;
   }
 
   private buildAttributes(item: Book, keys: BookFields[], config: ParserConfig): string {
