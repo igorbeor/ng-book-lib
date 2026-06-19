@@ -4,6 +4,8 @@
       <mat-label>Filter</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="The Hobbit" #input />
     </mat-form-field>
+
+    <button matButton="filled" type="button" (click)="onAdd()">+ Add</button>
   </div>
 
   <table mat-table [dataSource]="booksSource" matSort (matSortChange)="sortData($event)">
@@ -29,8 +31,8 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Pages</th>
       <td mat-cell *matCellDef="let element">
-        <button matButton="text">Update</button>
-        <button matButton="text">Delete</button>
+        <button matButton="text" type="button" (click)="onUpdate(element)">Update</button>
+        <button matButton="text" type="button" (click)="onRemove(element)">Delete</button>
       </td>
     </ng-container>
 

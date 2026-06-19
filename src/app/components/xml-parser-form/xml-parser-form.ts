@@ -91,7 +91,7 @@ export class XmlParserForm {
 
   public step = signal<number>(0);
 
-  public submitted = output();
+  public submitted = output<void>();
 
   private documentParser = inject(DocumentParser);
   private bookStore = inject(BookStore);

@@ -1,0 +1,37 @@
+@let action = bookData ? 'Update' : 'Create';
+<h2 mat-dialog-title>{{ action }} Book</h2>
+<mat-dialog-content>
+  <form class="update-book-form" [formRoot]="bookForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Author</mat-label>
+      <input matInput type="text" [formField]="bookForm.author" />
+      @if (bookForm.author().touched() && bookForm.author().invalid()) {
+        <mat-error>
+          {{ bookForm.author().errors()[0]?.message }}
+        </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Title</mat-label>
+      <input matInput type="text" [formField]="bookForm.title" />
+      @if (bookForm.title().touched() && bookForm.title().invalid()) {
+        <mat-error>
+          {{ bookForm.title().errors()[0]?.message }}
+        </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Pages</mat-label>
+      <input matInput type="number" [formField]="bookForm.pages" />
+      @if (bookForm.pages().touched() && bookForm.pages().invalid()) {
+        <mat-error>
+          {{ bookForm.pages().errors()[0]?.message }}
+        </mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button matButton="text" type="button" (click)="onCancel()">Cancel</button>
+  <button matButton="filled" type="button" (click)="onSet()" cdkFocusInitial>{{ action }}</button>
+</mat-dialog-actions>

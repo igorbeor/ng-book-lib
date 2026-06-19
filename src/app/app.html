@@ -11,9 +11,9 @@
       </div>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
+      <ng-template matStepLabel>Edit Books Data</ng-template>
       <div class="step-body">
-        <app-books-table></app-books-table>
+        <app-books-table (empty)="onReset()"></app-books-table>
       </div>
       <div class="step-actions">
         <button matButton="text" matStepperPrevious>Back</button>
