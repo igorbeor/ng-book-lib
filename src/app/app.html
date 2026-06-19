@@ -1,5 +1,5 @@
 <main class="container">
-  <mat-stepper [selectedIndex]="step()" #stepper>
+  <mat-stepper [selectedIndex]="step()">
     <mat-step>
       <ng-template matStepLabel>Upload XML File with Books</ng-template>
       <div class="step-body">
@@ -13,11 +13,11 @@
     <mat-step>
       <ng-template matStepLabel>Done</ng-template>
       <div class="step-body">
-        <p>You are now done.</p>
+        <app-books-table></app-books-table>
       </div>
       <div class="step-actions">
         <button matButton="text" matStepperPrevious>Back</button>
-        <button matButton="text" (click)="stepper.reset()">Reset</button>
+        <button matButton="text" (click)="onReset()">Reset</button>
         <button matButton="filled">Download</button>
       </div>
     </mat-step>

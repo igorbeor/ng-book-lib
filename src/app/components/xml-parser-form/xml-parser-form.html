@@ -38,7 +38,7 @@
         </mat-grid-tile>
       </mat-grid-list>
       <mat-action-row>
-        <button matButton="text" (click)="step.set(1)">Next</button>
+        <button matButton="text" type="button" (click)="step.set(1)">Next</button>
       </mat-action-row>
     </mat-expansion-panel>
     <mat-expansion-panel [expanded]="step() === 1" (opened)="step.set(1)" hideToggle>
@@ -115,8 +115,8 @@
         </mat-grid-tile>
       </mat-grid-list>
       <mat-action-row>
-        <button matButton="text" (click)="step.set(0)">Previous</button>
-        <button matButton="text" (click)="step.set(2)">Next</button>
+        <button matButton="text" type="button" (click)="step.set(0)">Previous</button>
+        <button matButton="text" type="button" (click)="step.set(2)">Next</button>
       </mat-action-row>
     </mat-expansion-panel>
   </mat-accordion>

@@ -97,18 +97,15 @@ export class XmlParserForm {
   private bookStore = inject(BookStore);
 
   private xmlParserModel = signal<ParserFormModel>({ ...this.PARSER_INITIAL_MODEL });
-  public xmlParserForm = form(
-    this.xmlParserModel,
-    (schemaPath) => {
-      required(schemaPath.config.listElement, { message: 'List element is required' });
-      required(schemaPath.config.itemElement, { message: 'Item element is required' });
-      required(schemaPath.file, { message: 'File is required' });
-      fileTypeRule(schemaPath.file, this.FILE_ALLOWED_TYPES);
-      fieldRule(schemaPath.config.fields.author);
-      fieldRule(schemaPath.config.fields.title);
-      fieldRule(schemaPath.config.fields.pages);
-    },
-  );
+  public xmlParserForm = form(this.xmlParserModel, (schemaPath) => {
+    required(schemaPath.config.listElement, { message: 'List element is required' });
+    required(schemaPath.config.itemElement, { message: 'Item element is required' });
+    required(schemaPath.file, { message: 'File is required' });
+    fileTypeRule(schemaPath.file, this.FILE_ALLOWED_TYPES);
+    fieldRule(schemaPath.config.fields.author);
+    fieldRule(schemaPath.config.fields.title);
+    fieldRule(schemaPath.config.fields.pages);
+  });
 
   public async onSubmit(): Promise<void> {
     await submit(this.xmlParserForm, async (f) => {
