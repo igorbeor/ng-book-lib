@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Structure B: each book's fields stored as attributes -->
-<books>
+<library>
   <book title="1984" author="George Orwell" pages="328" />
   <book title="Animal Farm" author="George Orwell" pages="112" />
   <book title="Pride and Prejudice" author="Jane Austen" pages="432" />
