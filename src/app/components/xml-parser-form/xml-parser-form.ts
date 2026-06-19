@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import {
   SchemaPathTree,
   validate,
@@ -7,6 +7,7 @@ import {
   required,
   FormRoot,
   validateTree,
+  submit,
 } from '@angular/forms/signals';
 import { ParserConfig, ParserConfigField } from '../../models/parser-config';
 import { FileUpload } from '../file-upload/file-upload';
@@ -14,8 +15,9 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { DocumentParser } from '../../services/document-parser/document-parser';
+import { BookStore } from '../../services/book-store/book-store';
 
 interface ParserFormModel {
   config: ParserConfig;
@@ -41,7 +43,10 @@ function fileTypeRule(path: SchemaPathTree<File | null>, fileTypes: string[]) {
     const file = value();
     return file === null || fileTypes.includes(file.type)
       ? null
-      : { kind: 'wrongFileType', message: `File should have one of the following types: ${fileTypes.join(', ')}` };
+      : {
+          kind: 'wrongFileType',
+          message: `File should have one of the following types: ${fileTypes.join(', ')}`,
+        };
   });
 }
 
@@ -55,9 +60,8 @@ function fileTypeRule(path: SchemaPathTree<File | null>, fileTypes: string[]) {
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatDividerModule,
     MatExpansionModule,
-],
+  ],
   templateUrl: './xml-parser-form.html',
   styleUrl: './xml-parser-form.scss',
 })
@@ -65,7 +69,7 @@ export class XmlParserForm {
   public readonly FILE_ALLOWED_TYPES = ['application/xml', 'text/xml'];
   private readonly PARSER_INITIAL_MODEL = {
     config: {
-      listElement: 'books',
+      listElement: 'library',
       itemElement: 'book',
       fields: {
         author: {
@@ -87,6 +91,11 @@ export class XmlParserForm {
 
   public step = signal<number>(0);
 
+  public submitted = output();
+
+  private documentParser = inject(DocumentParser);
+  private bookStore = inject(BookStore);
+
   private xmlParserModel = signal<ParserFormModel>({ ...this.PARSER_INITIAL_MODEL });
   public xmlParserForm = form(
     this.xmlParserModel,
@@ -99,18 +108,20 @@ export class XmlParserForm {
       fieldRule(schemaPath.config.fields.title);
       fieldRule(schemaPath.config.fields.pages);
     },
-    {
-      submission: {
-        action: (f) => {
-          console.log('Form submitted with model:', this.xmlParserModel());
-          f().reset({ ...this.PARSER_INITIAL_MODEL });
-          return Promise.resolve();
-        },
-      },
-    },
   );
 
-  public onReset() {
+  public async onSubmit(): Promise<void> {
+    await submit(this.xmlParserForm, async (f) => {
+      const { config, file } = this.xmlParserModel();
+      const books = await this.documentParser.parse(file!, config);
+      this.bookStore.set(books);
+      this.submitted.emit();
+      f().reset({ ...this.PARSER_INITIAL_MODEL });
+      console.log(this.bookStore.books());
+    });
+  }
+
+  public onReset(): void {
     this.xmlParserForm().reset({ ...this.PARSER_INITIAL_MODEL });
     this.step.set(0);
   }

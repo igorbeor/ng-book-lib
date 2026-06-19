@@ -8,6 +8,10 @@
   border-radius: 5px;
   width: 100%;
 
+  &.invalid {
+    border-color: var(--mat-sys-error);
+  }
+
   &.drag-over:not(.drag-disabled) {
     border-color: var(--mat-sys-tertiary);
   }

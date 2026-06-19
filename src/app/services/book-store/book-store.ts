@@ -12,7 +12,7 @@ export class BookStore {
 
   public add(value: Book): void {
     const newItem: BookStoreItem = { id: crypto.randomUUID(), ...value };
-    this._books.update((items) => (items ? [...items, newItem] : [newItem]));
+    this._books.update((items) => (items ? [newItem, ...items] : [newItem]));
   }
 
   public updateItem(id: string, value: Partial<Omit<Book, 'id'>>): void {

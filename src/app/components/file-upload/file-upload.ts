@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class FileUpload {
   public allowedTypes = input.required<string[]>();
 
+  public isInvalid = input<boolean>(false);
   public buttonText = input<string>('Select File');
   public dragAndDropText = input<string>('Drag and drop files here or click to');
 

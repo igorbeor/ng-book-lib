@@ -1,5 +1,5 @@
-<form [formRoot]="xmlParserForm" novalidate>
-  <mat-accordion class="example-headers-align">
+<form class="parser-form" [formRoot]="xmlParserForm" novalidate>
+  <mat-accordion>
     <mat-expansion-panel [expanded]="step() === 0" (opened)="step.set(0)" hideToggle>
       <mat-expansion-panel-header>
         <mat-panel-title> List/Item Elements </mat-panel-title>
@@ -9,7 +9,7 @@
       </mat-expansion-panel-header>
       <mat-grid-list cols="2" rowHeight="90px" gutterSize="10px">
         <mat-grid-tile colspan="1">
-          <mat-form-field class="form-field">
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>List Element</mat-label>
             <input matInput type="text" [formField]="xmlParserForm.config.listElement" />
             @if (
@@ -119,27 +119,20 @@
         <button matButton="text" (click)="step.set(2)">Next</button>
       </mat-action-row>
     </mat-expansion-panel>
-    <mat-expansion-panel [expanded]="step() === 2" (opened)="step.set(2)" hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title> List/Item Elements </mat-panel-title>
-        <mat-panel-description>
-          Please specify the XML elements that represent the list and individual items
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <app-file-upload
-        class="form-field file-field"
-        [allowedTypes]="FILE_ALLOWED_TYPES"
-        [formField]="xmlParserForm.file"
-      ></app-file-upload>
-      <mat-action-row class="form-actions">
-        @if (xmlParserForm.file().touched() && xmlParserForm.file().invalid()) {
-          <mat-error>
-            {{ xmlParserForm.file().errors()[0]?.message }}
-          </mat-error>
-        }
-        <button matButton="outlined" type="button" (click)="onReset()">Reset</button>
-        <button matButton="filled" type="submit">Submit</button>
-      </mat-action-row>
-    </mat-expansion-panel>
   </mat-accordion>
+  <div class="file-form-field">
+    <label for="file-input" class="file-form-field__label">Provide a valid XML file</label>
+    <app-file-upload
+      id="file-form-field__input"
+      class="form-field file-field"
+      [isInvalid]="xmlParserForm.file().touched() && xmlParserForm.file().invalid()"
+      [allowedTypes]="FILE_ALLOWED_TYPES"
+      [formField]="xmlParserForm.file"
+    ></app-file-upload>
+    @if (xmlParserForm.file().touched() && xmlParserForm.file().invalid()) {
+      <mat-error>
+        {{ xmlParserForm.file().errors()[0]?.message }}
+      </mat-error>
+    }
+  </div>
 </form>

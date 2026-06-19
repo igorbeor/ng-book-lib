@@ -1,3 +1,7 @@
+.parser-form {
+  padding: 0.5rem;
+}
+
 .form-field {
   width: 100%;
 
@@ -8,9 +12,18 @@
   }
 }
 
-.form-actions {
+.file-form-field {
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 1rem;
+  flex-direction: column;
+  margin-top: 1.5rem;
+  background-color: #fff;
+  // border-radius: .75rem;
+  border-radius: var(--mat-sys-corner-large);
+  box-shadow: var(--mat-sys-level2);
+  padding: 1.5rem;
+
+  &__label {
+    font: var(--mat-sys-label-large);
+    letter-spacing: var(--mat-sys-label-large-tracking);
+  }
 }

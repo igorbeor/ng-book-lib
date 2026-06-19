@@ -6,6 +6,7 @@
   (dragleave)="onDragLeave($event)"
   [class.drag-over]="isDragOver()"
   [class.drag-disabled]="file !== null"
+  [class.invalid]="isInvalid()"
 >
   @if (file !== null) {
     <div class="file-preview">
