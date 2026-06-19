@@ -1,9 +1,9 @@
 <main class="container">
-  <mat-stepper [selectedIndex]="step()">
+  <mat-stepper>
     <mat-step>
       <ng-template matStepLabel>Upload XML File with Books</ng-template>
       <div class="step-body">
-        <app-xml-parser-form #xmlParserForm (submitted)="nextStep()"></app-xml-parser-form>
+        <app-xml-parser-form #xmlParserForm (submitted)="onSubmitForm($event)"></app-xml-parser-form>
       </div>
       <div class="step-actions">
         <button matButton="text" type="button" (click)="xmlParserForm.onReset()">Reset</button>
@@ -16,9 +16,9 @@
         <app-books-table (empty)="onReset()"></app-books-table>
       </div>
       <div class="step-actions">
-        <button matButton="text" matStepperPrevious>Back</button>
-        <button matButton="text" (click)="onReset()">Reset</button>
-        <button matButton="filled">Download</button>
+        <button matButton="text" type="button" matStepperPrevious>Back</button>
+        <button matButton="text" type="button" (click)="onReset()">Reset</button>
+        <button matButton="filled" type="button" (click)="onDownload()">Download</button>
       </div>
     </mat-step>
   </mat-stepper>

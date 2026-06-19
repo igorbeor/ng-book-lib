@@ -1,5 +1,5 @@
 import { Service } from '@angular/core';
-import { Book } from '../../models/book';
+import { Book, BookFields } from '../../models/book';
 import { ParserConfig } from '../../models/parser-config';
 
 @Service()
@@ -84,5 +84,70 @@ export class DocumentParser {
     }
 
     return value ?? '';
+  }
+
+  private escapeXml(s: string): string {
+    return s.replace(
+      /[<>&'"]/g,
+      (c) =>
+        ({
+          '<': '&lt;',
+          '>': '&gt;',
+          '&': '&amp;',
+          "'": '&apos;',
+          '"': '&quot;',
+        })[c]!,
+    );
+  }
+
+  public toXML(data: Book[], config: ParserConfig): File {
+    const items = data.map((item) => this.itemToXml(item, config)).join('\n');
+    const xmlString = this.wrapDocument(items, config);
+    return this.createFile(xmlString);
+  }
+
+  private itemToXml(item: Book, config: ParserConfig): string {
+    const keys = Object.keys(item) as BookFields[];
+    const attributes = this.buildAttributes(item, keys, config);
+    const children = this.buildChildren(item, keys, config);
+
+    const openTag = attributes
+      ? `  <${config.itemElement} ${attributes}${ children ? '>' : '/>'}`
+      : `  <${config.itemElement}>`;
+
+    return `${openTag}${ children ? `\n${children}\n  </${config.itemElement}>` : ''}`;
+  }
+
+  private buildAttributes(item: Book, keys: BookFields[], config: ParserConfig): string {
+    return keys
+      .filter((key) => !config.fields[key].element && config.fields[key].attribute)
+      .map((key) => `${config.fields[key].attribute}="${item[key]}"`)
+      .join(' ');
+  }
+
+  private buildChildren(item: Book, keys: BookFields[], config: ParserConfig): string {
+    return keys
+      .filter((key) => !!config.fields[key].element)
+      .map((key) => this.fieldToElement(item, key, config))
+      .join('\n');
+  }
+
+  private fieldToElement(item: Book, key: BookFields, config: ParserConfig): string {
+    const { element, attribute } = config.fields[key];
+    const value = this.escapeXml(item[key]);
+
+    return attribute
+      ? `    <${element} ${attribute}=${value} />`
+      : `    <${element}>${value}</${element}>`;
+  }
+
+  private wrapDocument(items: string, config: ParserConfig): string {
+    return `<?xml version="1.0" encoding="UTF-8"?>\n<${config.listElement}>\n${items}\n</${config.listElement}>`;
+  }
+
+  private createFile(xmlString: string): File {
+    return new File([xmlString], `books-${new Date().toISOString()}.xml`, {
+      type: 'application/xml',
+    });
   }
 }

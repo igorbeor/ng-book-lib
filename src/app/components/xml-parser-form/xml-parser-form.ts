@@ -91,7 +91,7 @@ export class XmlParserForm {
 
   public step = signal<number>(0);
 
-  public submitted = output<void>();
+  public submitted = output<ParserConfig>();
 
   private documentParser = inject(DocumentParser);
   private bookStore = inject(BookStore);
@@ -112,7 +112,7 @@ export class XmlParserForm {
       const { config, file } = this.xmlParserModel();
       const books = await this.documentParser.parse(file!, config);
       this.bookStore.set(books);
-      this.submitted.emit();
+      this.submitted.emit(config);
       f().reset({ ...this.PARSER_INITIAL_MODEL });
       console.log(this.bookStore.books());
     });
